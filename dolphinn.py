@@ -3,6 +3,7 @@ import numpy as np
 
 class Dolphinn:
      def __init__(self, P, D, K):
+         print ("---")
          self.P=P
          self.D=D
          self.K=K
@@ -17,6 +18,7 @@ class Dolphinn:
              self.cube[int(Y[i])].append(i)
 
      def queries(self, Q, M, num_of_probes):
+        print ("----------------")
         n=0
         flag=False
         combs=np.ones((num_of_probes,self.K))
