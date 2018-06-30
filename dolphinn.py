@@ -45,7 +45,7 @@ class Dolphinn:
         b=np.array([2**j for j in range(self.K)])
 
         solQ=[]
-        for j in range(len(A)):
+        for j in range(len(A[0])):
            cands=[]
            N = [0 for i in range(self.N)]
            for k in range(self.N):
