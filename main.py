@@ -16,11 +16,12 @@ D=D1
 m=fr.findmean(P,D,10)
 P=fr.isotropize(P,D,m)
 Q=fr.isotropize(Q,D,m)
+NC=10					#ncubes used for mapping
 K=int(np.log2(len(P)))-2
 print("K=",K)
 #initialize hyperplane lsh
 tic = time.clock()
-dol=Dolphinn(P, D, K)
+dol=Dolphinn(P, D, K, NC)
 toc=time.clock()
 
 print(toc-tic)
