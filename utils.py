@@ -58,6 +58,8 @@ class Trie:
             # if node is leaf (aka contains a vector)
             if self.isLeaf():
                 idx = Trie.findDif(self.val , val, s)
+                if idx == -1:           # if equals
+                    return 0
                 print (val,idx)
                 # change the type of this node
                 # add the vectors to it's children
@@ -86,7 +88,6 @@ class Trie:
             if self.isLeaf():
                 print (Trie.tqr)
                 if Trie.hammingDist(val,self.val) <= Trie.tqr:
-                    print (Trie.hammingDist(val,self.val))
                     return [self.val]
                 else:
                     return []
@@ -136,6 +137,7 @@ class Trie:
         for i in Trie.idxset:
             if i not in st and v[i] != u[i]:
                 return i
+        return -1
 
     def hammingDist(v, u):
         return abs(np.sum(np.bitwise_xor(u,v)))/2
