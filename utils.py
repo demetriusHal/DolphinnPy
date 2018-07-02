@@ -54,41 +54,40 @@ class Trie:
             self.l = None
             self.r = None
             self.val = val
-        def insert(self, val, s):
+        def insert(self, key, val, s):
             # if node is leaf (aka contains a vector)
             if self.isLeaf():
-                idx = Trie.findDif(self.val , val, s)
+                idx = Trie.findDif(self.val[0] , key, s)
                 if idx == -1:           # if equals
                     return 0
-                print (val,idx)
+
                 # change the type of this node
                 # add the vectors to it's children
-                if val[idx] == 1:
-                    self.r = Trie.Node(val)
+                if key[idx] == 1:
+                    self.r = Trie.Node((key,val))
                     self.l = Trie.Node(self.val)
                 else:
-                    self.l = Trie.Node(val)
+                    self.l = Trie.Node((key,val))
                     self.r = Trie.Node(self.val)
 
                 # value stores the ith bit that is changed
                 self.val = idx
             else:
                 s.add(self.val) 
-                if val[self.val] == 1:
-                    self.r.insert(val, s)
+                if key[self.val] == 1:
+                    self.r.insert(key, val,  s)
                 else:
-                    self.l.insert(val, s)
+                    self.l.insert(key, val, s)
 
         #r-distance range query
         # val : query vector
         # r   : maximum radius
         # D   : Dimension - Depth
-        def rangeq(self, val, r, D):
+        def rangeq(self, key, r, D):
 
             if self.isLeaf():
-                print (Trie.tqr)
-                if Trie.hammingDist(val,self.val) <= Trie.tqr:
-                    return [self.val]
+                if Trie.hammingDist(key,self.val[0]) <= Trie.tqr:
+                    return [self.val[1]]
                 else:
                     return []
 
@@ -99,18 +98,18 @@ class Trie:
                 return []            
             rv = []
 
-            if (val[self.val] == 1):
-                rv += (self.r.rangeq(val, r, D-1))
-                rv += (self.l.rangeq(val, r-1, D-1))
+            if (key[self.val] == 1):
+                rv += (self.r.rangeq(key, r, D-1))
+                rv += (self.l.rangeq(key, r-1, D-1))
             else:
-                rv += (self.r.rangeq(val, r-1, D-1))
-                rv += (self.l.rangeq(val, r, D-1))
+                rv += (self.r.rangeq(key, r-1, D-1))
+                rv += (self.l.rangeq(key, r, D-1))
 
             return rv
 
         def gatherall(self):
             if self.isLeaf():
-                return [self.val]
+                return [self.val[1]]
 
             rv = self.l.gatherall()
             rv += (self.r.gatherall())
@@ -145,18 +144,22 @@ class Trie:
     def __init__(self, D):
         self.D = D
         self.root = None
-        Trie.idxset = [i for i in range (D)]
+        Trie.idxset = [i for i in range(D)]
 
-    def setRoot(self, R):
-        self.root = Trie.Node(R)
+    def setRoot(self, node):
+        key,val = node
+        key = key.astype(int)
+        self.root = Trie.Node((key,val))
 
 
-    def insert(self , V):
+    def insert(self , key, val):
         s = set([])
-        self.root.insert(V, s)
+        key = key.astype(int)
+        self.root.insert(key, val, s)
 
     def rangeq(self , q, r):
         Trie.tqr = r
+        q = q.astype(int)
         return self.root.rangeq(q,r,self.D)
 
     #debugging function
